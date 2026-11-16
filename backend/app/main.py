@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -31,7 +30,6 @@ def home():
         "message": "Welcome to SupportPilot AI!",
         "status": "Backend is running"
     }
-
 
 @app.get("/api/v1/health")
 def health_check():
