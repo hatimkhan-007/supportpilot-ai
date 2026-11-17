@@ -1,71 +1,33 @@
-import { useEffect, useState } from "react";
-import API from "./services/api";
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-    const [backendStatus, setBackendStatus] = useState("Checking...");
-    const [backendData, setBackendData] = useState(null);
-    const [error, setError] = useState("");
-
-    useEffect(() => {
-
-        const checkBackend = async () => {
-
-            try {
-
-                const response = await API.get("/api/v1/health");
-
-                setBackendData(response.data);
-                setBackendStatus("Connected");
-
-            } catch (err) {
-
-                console.error("Backend Error:", err);
-
-                setBackendStatus("Disconnected");
-                setError("Unable to connect to FastAPI backend.");
-
-            }
-
-        };
-
-        checkBackend();
-
-    }, []);
-
     return (
-        <div style={{
-            fontFamily: "Arial",
-            padding: "40px",
-            textAlign: "center"
-        }}>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate to="/login" replace />} />
 
-            <h1>SupportPilot AI</h1>
+                <Route path="/login" element={<Login />} />
 
-            <p>Intelligent Customer Support Platform</p>
+                <Route path="/register" element={<Register />} />
 
-            <hr />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-            <h2>Backend Connection</h2>
-
-            <h3>
-                Status: {backendStatus}
-            </h3>
-
-            {backendData && (
-                <div>
-                    <p>{backendData.application}</p>
-                    <p>{backendData.backend}</p>
-                    <p>{backendData.status}</p>
-                </div>
-            )}
-
-            {error && (
-                <p style={{ color: "red" }}>
-                    {error}
-                </p>
-            )}
-
-        </div>
+                <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
