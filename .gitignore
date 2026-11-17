@@ -52,3 +52,7 @@ desktop.ini
 # Temporary Files
 *.tmp
 *.bak
+
+# Firebase Admin credentials
+backend/secrets/
+**/firebase-service-account.json
