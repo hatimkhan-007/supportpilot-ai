@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-from huggingface_hub import User
+from app.models.user import User
 from sqlalchemy import (
     Boolean,
     DateTime,
