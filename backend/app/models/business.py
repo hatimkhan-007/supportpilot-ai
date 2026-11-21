@@ -43,7 +43,8 @@ class Business(Base):
         nullable=True
     )
 
-    owner_id: Mapped[int] = mapped_column(
+    owner_id: Mapped[str] = mapped_column(
+        String(36),
         ForeignKey("users.id"),
         nullable=False,
         index=True
