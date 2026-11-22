@@ -35,3 +35,15 @@ def create_business(
     db.refresh(business)
 
     return business
+
+def get_user_businesses(
+    db: Session,
+    owner: User,
+) -> list[Business]:
+
+    return (
+        db.query(Business)
+        .filter(Business.owner_id == owner.id)
+        .order_by(Business.created_at.desc())
+        .all()
+    )
