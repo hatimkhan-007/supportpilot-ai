@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.businesses import router as businesses_router
 
 from app.api.auth import router as auth_router
 from app.database.session import Base, engine
@@ -25,6 +26,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(businesses_router)
 
 
 # Frontend communication configuration
