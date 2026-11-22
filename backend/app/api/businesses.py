@@ -6,6 +6,7 @@ from app.database.session import get_db
 from app.models.user import User
 from app.schemas.business import BusinessCreate, BusinessResponse
 from app.services.business import create_business
+from app.services.business import get_user_businesses
 
 router = APIRouter(
     prefix="/api/v1/businesses",
@@ -26,5 +27,18 @@ def create_business_endpoint(
     return create_business(
         db=db,
         business_data=business_data,
+        owner=current_user,
+    )
+
+@router.get(
+    "/",
+    response_model=list[BusinessResponse],
+)
+def list_businesses_endpoint(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_user_businesses(
+        db=db,
         owner=current_user,
     )
