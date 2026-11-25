@@ -47,3 +47,62 @@ def get_user_businesses(
         .order_by(Business.created_at.desc())
         .all()
     )
+
+def get_business_by_id(
+    db: Session,
+    business_id: int,
+    owner: User,
+) -> Business | None:
+
+    return (
+        db.query(Business)
+        .filter(
+            Business.id == business_id,
+            Business.owner_id == owner.id,
+        )
+        .first()
+    )
+
+def update_business(
+    db: Session,
+    business_id: int,
+    business_data,
+    owner: User,
+) -> Business | None:
+
+    business = get_business_by_id(
+        db=db,
+        business_id=business_id,
+        owner=owner,
+    )
+
+    if not business:
+        return None
+
+    business.name = business_data.name
+    business.description = business_data.description
+
+    db.commit()
+    db.refresh(business)
+
+    return business
+
+def delete_business(
+    db: Session,
+    business_id: int,
+    owner: User,
+) -> bool:
+
+    business = get_business_by_id(
+        db=db,
+        business_id=business_id,
+        owner=owner,
+    )
+
+    if not business:
+        return False
+
+    db.delete(business)
+    db.commit()
+
+    return True
